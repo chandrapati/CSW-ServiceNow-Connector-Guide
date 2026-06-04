@@ -57,6 +57,25 @@ After the instance is saved, CSW **discovers all tables** from the instance (and
 - Favor attributes you'll actually **segment on**: environment, application, business unit, owner/support group, lifecycle status, data classification.
 - Remember labels are **namespaced** under the orchestrator/connector; see [`04-using-the-labels.md`](./04-using-the-labels.md) for how they appear and how to reference them.
 
+### ServiceNow field-naming cheat sheet (read this before you pick attributes)
+
+The attribute list mixes base ServiceNow fields with this customer's custom fields. The **prefix tells you where a field came from — not whether the data is trustworthy or "discovered."**
+
+| Prefix / pattern | Meaning | Example | Notes for label selection |
+|---|---|---|---|
+| *(no prefix)* | **Base / out-of-box** field, part of the standard table schema | `name`, `ip_address`, `serial_number`, `sys_class_name` | Consistent across instances; safe to assume it exists in any tenant. |
+| **`u_…`** | **Custom (user-created)** field added to a global-scope table — **"u" = user** | `u_app_id`, `u_environment`, `u_business_unit` | **Instance-specific.** Customers often keep their best business context here, so you'll frequently select these — but a `u_` field in one tenant won't exist in another. |
+| **`x_<scope>_…`** | Custom field from a **scoped application** | `x_acme_cmdb_app_tier` | Also custom/instance-specific; comes from an installed scoped app. |
+| `sys_…` | **System** fields maintained by the platform | `sys_id`, `sys_updated_on` | Generally not useful as labels (`sys_id` is opaque). |
+
+> **`u_` does NOT mean "discovered."** A custom field can be populated manually, by an import/transform map, by an integration, or by Discovery — you can't tell from the name. Whether a CI was populated by **ServiceNow Discovery / Service Mapping** is indicated by fields like **`discovery_source`**, **`first_discovered`**, and **`last_discovered`** (and the CI class), *not* by the `u_` prefix.
+
+**What to do with this:**
+
+- Treat `u_` / `x_…` fields as **the customer's authoritative business context candidates** — but **confirm with the CMDB owner** that the specific field is populated, accurate, and maintained before you build policy on it.
+- If you want to know how fresh/authoritative a record is, ask the CMDB team about **`discovery_source` / `last_discovered`** rather than inferring it from a field name.
+- For **reference fields** (often `u_owned_by`, `u_support_group`, `location`, `assigned_to`), remember they store a `sys_id` — add the reference-lookup URL param (Step 5) so they import as readable display values instead of opaque IDs.
+
 ## Step 4 — (Optional) Scripted REST APIs
 
 If you enabled **Include Scripted APIs**, the workflow is the **same as for tables** — Cisco states it "would give you a similar workflow to any other table." That means the **identical key rule applies: the API's response must expose an IP Address field, you select the `ip_address` attribute as the key, then pick up to 10 attributes.** A Scripted REST API that doesn't return an IP address can't be keyed and won't produce usable labels — exactly like a table with no IP field.
