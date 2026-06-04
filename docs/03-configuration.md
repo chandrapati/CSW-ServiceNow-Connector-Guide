@@ -45,6 +45,7 @@ After the instance is saved, CSW **discovers all tables** from the instance (and
 
 1. **Select a table** from the discovered list.
    - The table (or view) **must have an IP Address field.** If it doesn't, create a ServiceNow **View** that includes an IP field and select that instead (see FAQ).
+   - In most CMDB deployments the source is the **`cmdb_ci` Configuration Item table or one of its child classes** (e.g., `cmdb_ci_server`, `cmdb_ci_linux_server`, `cmdb_ci_win_server`, `cmdb_ci_vm_instance`). These are standard ServiceNow CMDB tables (not Cisco-specific); the connector treats them like any other table — the same **IP-Address-field / `ip_address`-key rule applies.** Pick the CI class that actually carries IP data for your estate, or a view that joins it to one that does.
 2. CSW **fetches the table's attributes**; choose the **`ip_address` attribute as the key.** This is how records map to CSW inventory IPs — without selecting `ip_address` as the key, CSW will not surface/integrate the table's records.
 3. **Select the attributes** you want to import as labels — **up to 10 unique attributes** per table.
    - ⚠ See [`07-validation-notes.md`](./07-validation-notes.md): Cisco documents "up to 10" here and a per-instance maximum of 15. Plan around **10 per table** and verify in your tenant.
@@ -58,11 +59,15 @@ After the instance is saved, CSW **discovers all tables** from the instance (and
 
 ## Step 4 — (Optional) Scripted REST APIs
 
-If you enabled **Include Scripted APIs**, the workflow mirrors tables. Requirements (enforced by CSW):
+If you enabled **Include Scripted APIs**, the workflow is the **same as for tables** — Cisco states it "would give you a similar workflow to any other table." That means the **identical key rule applies: the API's response must expose an IP Address field, you select the `ip_address` attribute as the key, then pick up to 10 attributes.** A Scripted REST API that doesn't return an IP address can't be keyed and won't produce usable labels — exactly like a table with no IP field.
+
+Use a Scripted REST API when the data you want isn't in a single table/view (e.g., it requires server-side joins or business logic), but you still need it surfaced as an IP-keyed record set.
+
+Additional requirements (enforced by CSW):
 
 - The Scripted REST API **cannot use path parameters.**
 - It **must support** `sysparm_limit`, `sysparm_fields`, and `sysparm_offset` as query parameters (CSW uses these to page and field-filter).
-- The service account needs the **`web_service_admin`** role.
+- The service account needs the **`web_service_admin`** role (tables only need `cmdb_read`).
 
 ## Step 5 — Sync interval & deletion behavior
 
