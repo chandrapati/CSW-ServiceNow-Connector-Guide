@@ -11,6 +11,7 @@ This guide is grounded in the **Cisco Secure Workload 4.0 User Guide**. Read thi
 | 3 | External Orchestrators in Secure Workload — On-Prem 4.0 (context for metadata-feed behavior) | https://www.cisco.com/c/en/us/td/docs/security/workload_security/secure_workload/user-guide/4_0/cisco-secure-workload-user-guide-on-prem-v40/configure-external-orchestrators-in-secure-workload.html |
 | 4 | Virtual Appliances for Connectors — On-Prem 4.0 | https://www.cisco.com/c/en/us/td/docs/security/workload_security/secure_workload/user-guide/4_0/cisco-secure-workload-user-guide-on-prem-v40/configure-and-manage-connectors-for-secure-workload.html |
 | 5 | Cisco Secure Workload data sheet (positioning) | https://www.cisco.com/c/en/us/products/collateral/data-center-analytics/tetration-analytics/cisco-secure-workload-dsv3a.html |
+| 6 | Configure and Manage Connectors for Secure Workload — **On-Premises 3.9** (corroborates the IP-Address-key requirement, verbatim) | https://www.cisco.com/c/en/us/td/docs/security/workload_security/secure_workload/user-guide/3_9/cisco-secure-workload-user-guide-on-prem-v39/configure-and-manage-connectors-for-secure-workload.html |
 
 > Earlier releases (3.7 / 3.9 / 3.10) document the ServiceNow connector with the same architecture and workflow; specific limit values and UI labels can differ by release. **Always confirm against the User Guide that matches your deployed CSW version.**
 
@@ -26,7 +27,7 @@ Every row below is stated by Cisco in source **#1 (CSW 4.0 On-Prem Connectors ch
 | Runs on the **Secure Workload Edge** appliance | ✅ Verified | Connector table lists *Secure Workload Edge*; Edge appliance section lists ServiceNow connector among those deployable on Edge. |
 | Required config: **username, password, instance URL** | ✅ Verified | "ServiceNow Instance Configuration" item list. |
 | Optional: **Scripted REST APIs**, **additional URL params** | ✅ Verified | Instance configuration + Sync Interval Configuration. |
-| **Only tables/views with an IP Address field** are supported; select `ip_address` as key | ✅ Verified | "ServiceNow Connector can only support integrating with tables having IP Address field." |
+| **Only tables/views with an IP Address field** are supported; CSW keys off it — you **must select `ip_address` as the key** | ✅ Verified | "User has to chose the `ip_address` attribute from the table as the key…" and Note: "ServiceNow Connector can only support integrating with tables having IP Address field." (Same wording in source #1 and source #6 / 3.9.) |
 | User selects **up to 10 unique attributes** per table | ⚠ Conflict | "user can chose upto 10 unique attributes from the table" **vs.** Limits table "Maximum number of attributes … 15." See `07`. |
 | Scripted REST APIs: **no path parameters**; must support `sysparm_limit`, `sysparm_fields`, `sysparm_offset` | ✅ Verified | Scripted REST API note. |
 | ServiceNow roles: **`cmdb_read`** (tables), **`web_service_admin`** (Scripted REST APIs) | ✅ Verified | "The ServiceNow user roles must include cmdb_read for tables and web_service_admin for scripted REST APIs…" |

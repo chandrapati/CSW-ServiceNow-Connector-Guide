@@ -23,7 +23,7 @@ All values below are from the **CSW 4.0 On-Premises User Guide** ("Limitations o
 ## Frequently asked questions (from Cisco docs)
 
 **Q: What if a ServiceNow CMDB table does not have an IP address?**
-A: Create a **View** on ServiceNow that includes the desired fields from the current table **plus an IP address** (potentially via a JOIN with another table). Use that view in place of the table name. (The connector can only integrate with tables/views that have an IP Address field.)
+A: It **cannot be integrated as-is.** CSW **keys records off the IP Address field** — during configuration you must select the `ip_address` attribute as the *key*, so the connector *"can only support integrating with tables having IP Address field."* Create a **View** on ServiceNow that includes the desired fields from the current table **plus an IP address** (potentially via a JOIN with another table), and use that view in place of the table name.
 
 **Q: What if a ServiceNow instance requires MFA?**
 A: **Not supported.** The connector cannot integrate with a ServiceNow instance that requires MFA. Use a service account that is exempt from MFA per your ServiceNow security policy.

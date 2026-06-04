@@ -33,11 +33,19 @@ Provide (Figure 19, *ServiceNow Instance Configuration*):
 
 ## Step 3 — Discover and select a table (or view)
 
+> [!IMPORTANT]
+> **CSW keys ServiceNow records off the IP Address field — a table is only usable if it has one.**
+> When you select a table, CSW lists its attributes and **you must choose the `ip_address` attribute as the key.** That key is what maps each ServiceNow record to an IP in CSW inventory, so a table with **no IP Address field cannot be integrated** (it won't yield usable labels). If a CMDB table you care about has no IP field, create a ServiceNow **View** that brings one in (e.g., via a JOIN) and select the view instead — see [`06-limitations-and-faq.md`](./06-limitations-and-faq.md).
+>
+> Cisco states this directly (CSW User Guide, *ServiceNow Instance Configuration*):
+> - *"User has to chose the `ip_address` attribute from the table as the key. Subsequently, user can chose upto 10 unique attributes from the table."*
+> - **Note:** *"ServiceNow Connector can only support integrating with tables having IP Address field."*
+
 After the instance is saved, CSW **discovers all tables** from the instance (and Scripted REST APIs if the checkbox is enabled) and presents them for selection (Figures 20–24):
 
 1. **Select a table** from the discovered list.
    - The table (or view) **must have an IP Address field.** If it doesn't, create a ServiceNow **View** that includes an IP field and select that instead (see FAQ).
-2. CSW **fetches the table's attributes**; choose the **`ip_address` attribute as the key.** This is how records map to CSW inventory IPs.
+2. CSW **fetches the table's attributes**; choose the **`ip_address` attribute as the key.** This is how records map to CSW inventory IPs — without selecting `ip_address` as the key, CSW will not surface/integrate the table's records.
 3. **Select the attributes** you want to import as labels — **up to 10 unique attributes** per table.
    - ⚠ See [`07-validation-notes.md`](./07-validation-notes.md): Cisco documents "up to 10" here and a per-instance maximum of 15. Plan around **10 per table** and verify in your tenant.
 4. **Review and apply** the configuration (Figure 24).

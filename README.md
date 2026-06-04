@@ -23,7 +23,7 @@ This repo explains what the connector does (and does not) do, the prerequisites,
 | **Connector family** | **Inventory Enrichment** — it does *not* ingest flows or create inventory. |
 | **What it does** | Connects to a ServiceNow instance, reads CMDB tables / Scripted REST APIs, and **annotates CSW inventory IP addresses with ServiceNow attributes as labels.** |
 | **Where it runs** | The **Secure Workload Edge** virtual appliance. |
-| **Key requirement on each record** | The source table/view **must contain an IP Address field** — it is selected as the key. |
+| **Key requirement on each table** | The source table/view **must contain an IP Address field**, and you **must select the `ip_address` attribute as the *key*** — CSW keys records off it. A table with no IP field **cannot be integrated**. |
 | **ServiceNow permissions** | `cmdb_read` (tables) and `web_service_admin` (Scripted REST APIs). |
 | **Default sync** | Every **60 minutes** (configurable as *Data fetch frequency*). |
 | **Egress** | Edge VM → ServiceNow over **TCP 443**; Edge VM → CSW cluster over **TCP 443**. The Edge VM always initiates. |
