@@ -81,11 +81,20 @@ In the **Sync Interval** configuration (Figure 25):
 
 - For **large tables**, increase *Data fetch frequency* so each sync finishes comfortably within the window.
 - ⚠ **Delete entry interval:** Cisco's docs are inconsistent — the *Processing* section says labels are removed after **10 continuous sync intervals**, while the *Sync Interval Configuration* section says **48 consecutive sync intervals**. Either way, **a prolonged ServiceNow outage can cause labels to be cleaned up.** Set this value deliberately and confirm the effective behavior in your tenant. See [`07-validation-notes.md`](./07-validation-notes.md).
-- **Example additional URL param** (reference lookups with display values):
+### Additional REST API URL params (optional)
 
-  ```
-  sysparm_exclude_reference_link=true&sysparm_display_value=true
-  ```
+If any additional parameters need to be passed when CSW calls the ServiceNow REST API for your tables, configure them under **Additional REST API url params**. This is **optional** and is appended to the table query.
+
+The most common use is a **reference lookup**, so that ServiceNow **reference fields** (e.g., `assigned_to`, `owned_by`, `location`, `support_group` — stored as `sys_id` links) come back as **human-readable display values** instead of opaque `sys_id` URLs. Per the CSW User Guide, use:
+
+```
+sysparm_exclude_reference_link=true&sysparm_display_value=true
+```
+
+- `sysparm_display_value=true` → return the **display value** of each field rather than the raw value/sys_id.
+- `sysparm_exclude_reference_link=true` → **omit the reference `link` object**, so you don't import the API URL.
+
+> **Why it matters for labels:** without these params, a reference attribute often imports as a `sys_id` (or a link), which makes a useless label. Add this param when any attribute you selected is a **reference field** and you want a readable label (owner name, location name, group name) that you can actually scope and segment on.
 
 ## Step 6 — Verify
 
