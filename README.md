@@ -33,6 +33,37 @@ This repo explains what the connector does (and does not) do, the prerequisites,
 
 ---
 
+## Architecture
+
+The connector runs on the **Secure Workload Edge** appliance (a VM on your ESXi/KVM hypervisor). The Edge appliance keeps a **control-plane** session to the Secure Workload cluster, and the **ServiceNow connector** reaches out to the **customer's ServiceNow instance** to read CMDB tables / Scripted REST APIs and turn those attributes into inventory labels.
+
+```mermaid
+flowchart LR
+    subgraph HV["Hypervisor (ESXi / KVM)"]
+        subgraph EDGE["Secure Workload Edge Appliance VM"]
+            direction TB
+            SNOW["ServiceNow Connector"]
+            ISE["ISE Connector<br/>(optional)"]
+            SYS["Syslog / Alert Notifiers<br/>(optional)"]
+        end
+    end
+
+    CLUSTER(["Secure Workload Cluster"])
+    SNOWINST[("Customer ServiceNow Instance<br/>CMDB tables / Scripted REST APIs")]
+
+    EDGE <-. "Control Plane · TCP 443<br/>(Edge VM initiates)" .-> CLUSTER
+    SNOW == "TCP 443 · reads CMDB (cmdb_read)<br/>attributes → inventory labels" ==> SNOWINST
+
+    classDef hi fill:#0b7285,stroke:#053,color:#ffffff,stroke-width:2px;
+    classDef inst fill:#2f9e44,stroke:#1b5e20,color:#ffffff;
+    class SNOW hi;
+    class SNOWINST inst;
+```
+
+> This mirrors the standard Edge-appliance connector topology — the same place ISE and the Syslog/alert notifiers run — but the external endpoint here is the **customer's ServiceNow CMDB instance**, not an alert destination. The connector reads ServiceNow over **TCP 443** (`cmdb_read` for tables, `web_service_admin` for Scripted REST APIs) and the Edge VM talks to the cluster over **TCP 443**, always initiating the connection.
+
+---
+
 ## Quick start (high level)
 
 1. **Confirm you have a Secure Workload *Edge* appliance** deployed and healthy for the target tenant (rootscope). See [`docs/02-prerequisites.md`](./docs/02-prerequisites.md).

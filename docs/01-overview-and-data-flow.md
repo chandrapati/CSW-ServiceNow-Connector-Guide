@@ -21,7 +21,34 @@ This is the most common source of confusion in a POV, so it's worth being explic
 - **It does not push anything back to ServiceNow.** The flow is read-only *from* ServiceNow *into* CSW. (If after a manual label cleanup the record still exists in ServiceNow, the next sync re-imports it.)
 - **It is not the same as a ServiceNow "external orchestrator."** CSW historically supported several metadata sources as *external orchestrators*; the ServiceNow integration in current releases is delivered as a **connector** that runs on the **Edge** appliance. The annotation behavior (decorate existing IPs, don't create them) mirrors the orchestrator metadata-feed model.
 
-## Data flow
+## Architecture (appliance topology)
+
+The ServiceNow connector is hosted on the **Secure Workload Edge** appliance VM (on your ESXi/KVM hypervisor), next to where ISE and the Syslog/alert-notifier connectors run. The difference is the external endpoint: the ServiceNow connector reaches the **customer's ServiceNow CMDB instance** rather than an alert destination.
+
+```mermaid
+flowchart LR
+    subgraph HV["Hypervisor (ESXi / KVM)"]
+        subgraph EDGE["Secure Workload Edge Appliance VM"]
+            direction TB
+            SNOW["ServiceNow Connector"]
+            ISE["ISE Connector<br/>(optional)"]
+            SYS["Syslog / Alert Notifiers<br/>(optional)"]
+        end
+    end
+
+    CLUSTER(["Secure Workload Cluster"])
+    SNOWINST[("Customer ServiceNow Instance<br/>CMDB tables / Scripted REST APIs")]
+
+    EDGE <-. "Control Plane · TCP 443<br/>(Edge VM initiates)" .-> CLUSTER
+    SNOW == "TCP 443 · reads CMDB (cmdb_read)<br/>attributes → inventory labels" ==> SNOWINST
+
+    classDef hi fill:#0b7285,stroke:#053,color:#ffffff,stroke-width:2px;
+    classDef inst fill:#2f9e44,stroke:#1b5e20,color:#ffffff;
+    class SNOW hi;
+    class SNOWINST inst;
+```
+
+## Data flow (request sequence)
 
 ```
                          (read-only, every sync interval — default 60 min)
