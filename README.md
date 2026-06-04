@@ -16,6 +16,25 @@ This repo explains what the connector does (and does not) do, the prerequisites,
 
 ---
 
+## 📖 Guide contents — start here
+
+Read in order, or jump straight to what you need. Each link opens the full page.
+
+| # | Guide page | What you'll find |
+|---|---|---|
+| 00 | **[Official References & Claim Verification](./docs/00-official-references.md)** | Cisco doc links (On-Prem 4.0, SaaS 4.0, 3.9) + a claim-by-claim verification table — **read first**. |
+| 01 | **[Overview & Data Flow](./docs/01-overview-and-data-flow.md)** | What the connector is/is not, architecture, and the request sequence. |
+| 02 | **[Prerequisites](./docs/02-prerequisites.md)** | Edge appliance, ServiceNow account/roles, MFA, ports/firewall, data-design decisions. |
+| 03 | **[Configuration Walkthrough](./docs/03-configuration.md)** | Step-by-step: instance, table/`cmdb_ci` selection, `ip_address` key, attributes, Scripted REST APIs, sync interval, URL params, field-naming cheat sheet. |
+| 04 | **[Using the Labels](./docs/04-using-the-labels.md)** | Where labels appear and how to use them in scopes, filters, and policy. |
+| 05 | **[Operations & Troubleshooting](./docs/05-operations-and-troubleshooting.md)** | Day-2 sync/deletion, connector alerts, Maintenance Explorer cleanup, common issues. |
+| 06 | **[Limitations & FAQ](./docs/06-limitations-and-faq.md)** | Documented limits and Cisco's FAQ (verbatim, validated). |
+| 07 | **[Validation Notes](./docs/07-validation-notes.md)** | Documented-fact audit + the two flagged Cisco doc inconsistencies. |
+
+> **Official Cisco source pages (open directly):** [Connectors — On-Premises 4.0](https://www.cisco.com/c/en/us/td/docs/security/workload_security/secure_workload/user-guide/4_0/cisco-secure-workload-user-guide-on-prem-v40/configure-and-manage-connectors-for-secure-workload.html) · [Connectors — SaaS 4.0](https://www.cisco.com/c/en/us/td/docs/security/workload_security/secure_workload/user-guide/4_0/cisco-secure-workload-user-guide-saas-v40/m-connectors.html) · [Connectors — On-Premises 3.9](https://www.cisco.com/c/en/us/td/docs/security/workload_security/secure_workload/user-guide/3_9/cisco-secure-workload-user-guide-on-prem-v39/configure-and-manage-connectors-for-secure-workload.html)
+
+---
+
 ## TL;DR — what this connector is
 
 | Question | Answer (per CSW 4.0 User Guide) |
@@ -80,19 +99,16 @@ Full walkthrough: [`docs/03-configuration.md`](./docs/03-configuration.md).
 
 ## What's in this repo
 
-```
-CSW-ServiceNow-Connector-Guide/
-├── README.md                              ← you are here (overview + quick start)
-└── docs/
-    ├── 00-official-references.md          ← Cisco doc links + claim verification table (read first)
-    ├── 01-overview-and-data-flow.md       ← what it is, how data flows, what it does NOT do
-    ├── 02-prerequisites.md                ← Edge appliance, ServiceNow account/roles, ports, MFA
-    ├── 03-configuration.md                ← step-by-step: instance, tables, Scripted REST, sync interval
-    ├── 04-using-the-labels.md             ← how labels appear and how to use them in scopes/policy
-    ├── 05-operations-and-troubleshooting.md ← sync, deletion, Explore cleanup, alerts, common issues
-    ├── 06-limitations-and-faq.md          ← published limits + Cisco FAQ (verbatim, validated)
-    └── 07-validation-notes.md             ← documented-fact audit + flagged Cisco doc inconsistencies
-```
+All guide pages live in [`docs/`](./docs) — direct links below (same as the **Guide contents** table above):
+
+- 📄 [`docs/00-official-references.md`](./docs/00-official-references.md) — Cisco doc links + claim verification table (read first)
+- 📄 [`docs/01-overview-and-data-flow.md`](./docs/01-overview-and-data-flow.md) — what it is, how data flows, what it does NOT do
+- 📄 [`docs/02-prerequisites.md`](./docs/02-prerequisites.md) — Edge appliance, ServiceNow account/roles, ports, MFA
+- 📄 [`docs/03-configuration.md`](./docs/03-configuration.md) — step-by-step: instance, tables, Scripted REST, sync interval, URL params
+- 📄 [`docs/04-using-the-labels.md`](./docs/04-using-the-labels.md) — how labels appear and how to use them in scopes/policy
+- 📄 [`docs/05-operations-and-troubleshooting.md`](./docs/05-operations-and-troubleshooting.md) — sync, deletion, Explore cleanup, alerts, common issues
+- 📄 [`docs/06-limitations-and-faq.md`](./docs/06-limitations-and-faq.md) — published limits + Cisco FAQ (verbatim, validated)
+- 📄 [`docs/07-validation-notes.md`](./docs/07-validation-notes.md) — documented-fact audit + flagged Cisco doc inconsistencies
 
 ---
 
