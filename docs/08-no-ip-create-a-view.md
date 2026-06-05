@@ -231,11 +231,12 @@ sysparm_exclude_reference_link=true&sysparm_display_value=true
 - **Table rotation.** You cannot build a Database View on table-rotation tables
   (not a concern for CMDB CI tables).
 - **Calculated/scripted fields are silently excluded.** ServiceNow **Calculated** fields (type: Calculated, backed by a Groovy or JavaScript script on the source table) cannot be exposed through a Database View — they are absent from the view output with no error. If the CMDB table you are joining has a calculated field you want as a CSW label (e.g., a derived risk score, a compliance tier, a dynamically resolved owner), use the **Scripted REST API** path instead (see below).
-- **Scripted REST API alternative.** If the data needs server-side business logic, calculated fields, or joins a Database View cannot express, a **Scripted REST API** that returns an IP field is the other supported path — same IP-key rule applies (see [`03-configuration.md`](./03-configuration.md) Step 4). This is the right choice any time the attributes you need cannot be represented as stored, non-calculated columns across directly joinable tables.
+- **Scripted REST API alternative.** If the data needs server-side business logic, calculated fields, or joins a Database View cannot express, a **Scripted REST API** that returns an IP field is the other supported path — same IP-key rule applies (see [`03-configuration.md`](./03-configuration.md) Step 4). This is the right choice any time the attributes you need cannot be represented as stored, non-calculated columns across directly joinable tables. A full working example with pagination, calculated fields, and CSW connector configuration is in **[`09-scripted-rest-api-example.md`](./09-scripted-rest-api-example.md)**.
 
 ---
 
 **Related pages:** [03 — Configuration](./03-configuration.md) ·
 [06 — Limitations & FAQ](./06-limitations-and-faq.md) ·
 [02 — Prerequisites](./02-prerequisites.md) ·
-[05 — Operations & Troubleshooting](./05-operations-and-troubleshooting.md)
+[05 — Operations & Troubleshooting](./05-operations-and-troubleshooting.md) ·
+[09 — Scripted REST API Example](./09-scripted-rest-api-example.md)
