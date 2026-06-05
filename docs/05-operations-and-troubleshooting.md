@@ -45,7 +45,7 @@ Use this only when you need to remove labels for a specific IP **immediately**, 
 | **Labels disappeared unexpectedly** | Delete-entry interval aged them out during an outage | Check ServiceNow reachability; review the **Delete entry interval** (⚠ conflicting documented values — see `07`); restore connectivity and let a sync repopulate. |
 | **Sync seems to never finish / overlaps** | Table too large for interval | Increase **Data fetch frequency**; narrow the table/view; reduce attributes. |
 | **Can't reach Maintenance Explorer** | Insufficient privileges | Needs **Customer Support** role. |
-| **A CMDB table has no IP field** | Table not usable directly | Create a **View** that includes an IP field (e.g., JOIN) and configure that view. |
+| **A CMDB table has no IP field** | Table not usable directly | Create a **View** that includes an IP field (e.g., JOIN) and configure that view — see [`08-no-ip-create-a-view.md`](./08-no-ip-create-a-view.md). |
 | **Connector down alert** | Edge appliance/connector heartbeat lost | Check Edge VM health, resources, and connectivity to the CSW cluster (443, Kafka brokers in `kafkaBrokerIps.txt`). |
 
 ## Verifying connectivity from the Edge VM

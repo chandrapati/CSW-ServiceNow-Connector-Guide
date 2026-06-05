@@ -30,6 +30,7 @@ Read in order, or jump straight to what you need. Each link opens the full page.
 | 05 | **[Operations & Troubleshooting](./docs/05-operations-and-troubleshooting.md)** | Day-2 sync/deletion, connector alerts, Maintenance Explorer cleanup, common issues. |
 | 06 | **[Limitations & FAQ](./docs/06-limitations-and-faq.md)** | Documented limits and Cisco's FAQ (verbatim, validated). |
 | 07 | **[Validation Notes](./docs/07-validation-notes.md)** | Documented-fact audit + the two flagged Cisco doc inconsistencies. |
+| 08 | **[No IP? Build a ServiceNow View](./docs/08-no-ip-create-a-view.md)** | Step-by-step Database View (JOIN to an IP-bearing table) for when a CMDB table has no IP field — the FAQ workaround, in full. |
 
 > **Official Cisco source pages (open directly):** [Connectors — On-Premises 4.0](https://www.cisco.com/c/en/us/td/docs/security/workload_security/secure_workload/user-guide/4_0/cisco-secure-workload-user-guide-on-prem-v40/configure-and-manage-connectors-for-secure-workload.html) · [Connectors — SaaS 4.0](https://www.cisco.com/c/en/us/td/docs/security/workload_security/secure_workload/user-guide/4_0/cisco-secure-workload-user-guide-saas-v40/m-connectors.html) · [Connectors — On-Premises 3.9](https://www.cisco.com/c/en/us/td/docs/security/workload_security/secure_workload/user-guide/3_9/cisco-secure-workload-user-guide-on-prem-v39/configure-and-manage-connectors-for-secure-workload.html)
 

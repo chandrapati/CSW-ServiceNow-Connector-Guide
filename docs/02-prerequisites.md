@@ -20,7 +20,7 @@ Work through this checklist **before** you open the connector configuration. Mos
   | **Scripted REST APIs** | `web_service_admin` |
 
 - [ ] The instance does **not require MFA** for this account. **MFA-protected ServiceNow instances are not supported** by the connector. Use a service account exempt from MFA (per your ServiceNow security policy).
-- [ ] Your target **table(s) contain an IP Address field.** If a CMDB table you care about has no IP field, plan to **create a View** that brings in an IP field (e.g., via a JOIN to another table) and use the view instead. See the FAQ in [`06-limitations-and-faq.md`](./06-limitations-and-faq.md).
+- [ ] Your target **table(s) contain an IP Address field.** If a CMDB table you care about has no IP field, plan to **create a View** that brings in an IP field (e.g., via a JOIN to another table) and use the view instead. Step-by-step: [`08-no-ip-create-a-view.md`](./08-no-ip-create-a-view.md).
 - [ ] If you'll use **Scripted REST APIs**, confirm they:
   - have **no path parameters**, and
   - support the `sysparm_limit`, `sysparm_fields`, and `sysparm_offset` query parameters.

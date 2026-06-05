@@ -35,7 +35,7 @@ Provide (Figure 19, *ServiceNow Instance Configuration*):
 
 > [!IMPORTANT]
 > **CSW keys ServiceNow records off the IP Address field — a table is only usable if it has one.**
-> When you select a table, CSW lists its attributes and **you must choose the `ip_address` attribute as the key.** That key is what maps each ServiceNow record to an IP in CSW inventory, so a table with **no IP Address field cannot be integrated** (it won't yield usable labels). If a CMDB table you care about has no IP field, create a ServiceNow **View** that brings one in (e.g., via a JOIN) and select the view instead — see [`06-limitations-and-faq.md`](./06-limitations-and-faq.md).
+> When you select a table, CSW lists its attributes and **you must choose the `ip_address` attribute as the key.** That key is what maps each ServiceNow record to an IP in CSW inventory, so a table with **no IP Address field cannot be integrated** (it won't yield usable labels). If a CMDB table you care about has no IP field, create a ServiceNow **View** that brings one in (e.g., via a JOIN) and select the view instead — step-by-step in [`08-no-ip-create-a-view.md`](./08-no-ip-create-a-view.md).
 >
 > Cisco states this directly (CSW User Guide, *ServiceNow Instance Configuration*):
 > - *"User has to chose the `ip_address` attribute from the table as the key. Subsequently, user can chose upto 10 unique attributes from the table."*
@@ -44,7 +44,7 @@ Provide (Figure 19, *ServiceNow Instance Configuration*):
 After the instance is saved, CSW **discovers all tables** from the instance (and Scripted REST APIs if the checkbox is enabled) and presents them for selection (Figures 20–24):
 
 1. **Select a table** from the discovered list.
-   - The table (or view) **must have an IP Address field.** If it doesn't, create a ServiceNow **View** that includes an IP field and select that instead (see FAQ).
+   - The table (or view) **must have an IP Address field.** If it doesn't, create a ServiceNow **View** that includes an IP field and select that instead (step-by-step: [`08-no-ip-create-a-view.md`](./08-no-ip-create-a-view.md)).
    - In most CMDB deployments the source is the **`cmdb_ci` Configuration Item table or one of its child classes** (e.g., `cmdb_ci_server`, `cmdb_ci_linux_server`, `cmdb_ci_win_server`, `cmdb_ci_vm_instance`). These are standard ServiceNow CMDB tables (not Cisco-specific); the connector treats them like any other table — the same **IP-Address-field / `ip_address`-key rule applies.** Pick the CI class that actually carries IP data for your estate, or a view that joins it to one that does.
 2. CSW **fetches the table's attributes**; choose the **`ip_address` attribute as the key.** This is how records map to CSW inventory IPs — without selecting `ip_address` as the key, CSW will not surface/integrate the table's records.
 3. **Select the attributes** you want to import as labels — **up to 10 unique attributes** per table.
