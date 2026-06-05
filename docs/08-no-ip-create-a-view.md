@@ -105,18 +105,49 @@ row regardless of IP.
 > the `cmdb_ci` field on the network-adapter view table). Supported operators:
 > `= != < <= > >= && ||`.
 
+### Additional fields available from the joined tables
+
+Beyond the IP key, the joined tables expose other attributes that make useful CSW labels. These are available as view columns if you add them to View Fields in Step 5 — they are silently excluded if you don't.
+
+**From `cmdb_ci_network_adapter` (prefix `na_`):**
+
+| View field name | Source field | Useful for |
+|---|---|---|
+| `na_ip_address` | `ip_address` | **Required** — the IP key |
+| `na_mac_address` | `mac_address` | Hardware/asset correlation; detect NIC changes |
+| `na_operational_status` | `operational_status` | Filter inactive or decommissioned NICs |
+| `na_netmask` | `netmask` | Subnet-aware scoping in CSW |
+| `na_name` | `name` | Interface name (e.g., `eth0`, `ens3`) |
+
+**From `cmdb_ci_ip_address` (prefix `ip_`, Pattern B only):**
+
+| View field name | Source field | Useful for |
+|---|---|---|
+| `ip_ip_address` | `ip_address` | **Required** — the IP key in Pattern B |
+| `ip_subnet_mask` | `subnet_mask` | Subnet annotation on the IP record |
+| `ip_nic` | `nic` | Reference back to the NIC (usually excluded) |
+
+> **Add these in Step 5.** If you do not explicitly add a field to View Fields, it will not appear in the view output — even if the underlying table has it. See the all-or-nothing warning in Step 5.
+
 ---
 
 ## Step 5 — (Optional) Restrict the returned fields
 
-If you add **no** View Fields, the view returns **all** columns from **every**
-joined table (all prefixed) — which makes the CSW attribute list noisy. Add only
-what you need via the **View Fields** related list on each view table:
+> ⚠️ **All-or-nothing behavior — decide upfront.**
+> ServiceNow View Fields work on an **all-or-nothing basis per view table**:
+> - If you add **no** View Fields to a view table, that table returns **all** of its columns (noisy, but nothing is lost).
+> - The moment you add **even one** View Field to a view table, ServiceNow switches to returning **only the fields you explicitly listed** for that table. Any attribute you omit — even one you add later to the underlying CMDB table — will be **silently absent** from the view output and therefore invisible to the CSW connector.
+>
+> **Recommendation:** treat View Fields as your final attribute contract. Before saving, list every field you might ever want as a CSW label — including the additional `na_*` / `ip_*` fields from Step 4. It is much easier to add all candidates now than to edit the view and re-sync the connector later.
 
-- the IP column (`na_ip_address` or `ip_ip_address`),
-- `ci_name`, `ci_sys_id`,
-- the business attributes you want as labels (e.g., `ci_u_environment`,
-  `ci_support_group`, `ci_business_service`, `ci_owned_by`).
+Add View Fields via the **View Fields** related list on each view table:
+
+- the IP column (`na_ip_address` or `ip_ip_address`) — **required**
+- `ci_name`, `ci_sys_id`
+- any `na_*` fields you want (e.g., `na_mac_address`, `na_operational_status`) — see Step 4 table
+- the business attributes from the CI table you want as labels (e.g., `ci_u_environment`, `ci_support_group`, `ci_business_service`, `ci_owned_by`, `ci_location`, `ci_u_cost_center`)
+
+If you are unsure which attributes you need, **leave View Fields empty** for the first sync so CSW shows you the full column list — then come back and pin the ones you actually use.
 
 ---
 
@@ -199,10 +230,8 @@ sysparm_exclude_reference_link=true&sysparm_display_value=true
   outage can flush labels.
 - **Table rotation.** You cannot build a Database View on table-rotation tables
   (not a concern for CMDB CI tables).
-- **Scripted REST API alternative.** If the data needs server-side business logic
-  or joins a view can't express, a **Scripted REST API** that returns an IP field
-  is the other supported path — same IP-key rule applies (see
-  [`03-configuration.md`](./03-configuration.md) Step 4).
+- **Calculated/scripted fields are silently excluded.** ServiceNow **Calculated** fields (type: Calculated, backed by a Groovy or JavaScript script on the source table) cannot be exposed through a Database View — they are absent from the view output with no error. If the CMDB table you are joining has a calculated field you want as a CSW label (e.g., a derived risk score, a compliance tier, a dynamically resolved owner), use the **Scripted REST API** path instead (see below).
+- **Scripted REST API alternative.** If the data needs server-side business logic, calculated fields, or joins a Database View cannot express, a **Scripted REST API** that returns an IP field is the other supported path — same IP-key rule applies (see [`03-configuration.md`](./03-configuration.md) Step 4). This is the right choice any time the attributes you need cannot be represented as stored, non-calculated columns across directly joinable tables.
 
 ---
 
