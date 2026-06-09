@@ -218,7 +218,8 @@ function _assetCriticality(ciGr) {
 
 ```bash
 # Replace with your instance URL, namespace, and API ID.
-# The CSW service account must have 'rest_service' role (or 'admin').
+# Per the CSW User Guide, the connector account uses 'web_service_admin' for Scripted REST APIs
+# (in addition to 'cmdb_read' for the underlying tables); see docs/00 and docs/02.
 curl -u "csw_integration_user:PASSWORD" \
   "https://YOURINSTANCE.service-now.com/api/x_cisco_csw/csw_cmdb_ip_export/v1/records?sysparm_limit=5" \
   | python3 -m json.tool
@@ -262,7 +263,7 @@ The CSW service account needs:
 
 | Permission | Where to grant |
 |---|---|
-| `rest_service` role | **User Administration → Users → {csw_integration_user} → Roles** |
+| `web_service_admin` role (Cisco-documented requirement for Scripted REST APIs) | **User Administration → Users → {csw_integration_user} → Roles** — see [`00-official-references.md`](./00-official-references.md) and [`02-prerequisites.md`](./02-prerequisites.md) |
 | Read on `cmdb_ci_appl` | Included in `cmdb_read` — see [`02-prerequisites.md`](./02-prerequisites.md) |
 | Read on `cmdb_ci_network_adapter` | Included in `cmdb_read` |
 | Read on `sys_user` (for `_ownerEmail`) | `itil` role includes this; or add a specific read ACL |

@@ -152,13 +152,55 @@ CSW created and use those exact keys in filters/scopes/policy.
 
 ## 5. When a Database View isn't enough → Scripted REST API
 
-If the attributes you need are **calculated/scripted fields** (a derived risk
-score, a dynamically resolved owner, a compliance tier) or require server-side
-logic or joins a view can't express, use a **Scripted REST API** that returns an
-IP field instead — the same IP-key rule applies, and it needs the
-`web_service_admin` role. A complete working example (pagination, calculated
-fields, connector config) is in
+A Database View (§4) only returns **stored, directly-joinable columns**. If the
+attributes you want as labels need server-side logic, use a **Scripted REST API**
+instead — same IP-key rule applies. Reach for it when you need any of:
+
+- **Calculated/scripted fields** (`type: calculated` fields) — Database Views
+  silently drop these.
+- **Multi-hop reference resolution** — e.g. walking `owned_by → sys_user → email`
+  to label workloads with the owner's email, which a view's WHERE clause can't do.
+- **Derived/business-logic labels** — risk tier, compliance scope, asset
+  criticality, or any value computed from several CMDB fields.
+- **Joins across more than two tables** where the reference chain makes a view
+  WHERE clause impractical.
+
+**How CSW consumes it.** The connector reads JSON in the same envelope as the
+Table API — **one object per IP**, each containing the IP-key field:
+
+```json
+{ "result": [
+  { "ip_address": "10.10.1.25", "name": "payments-api-01",
+    "environment": "production", "owned_by": "Jane Smith",
+    "owner_email": "jane.smith@example.com", "risk_tier": "high",
+    "compliance_scope": "pci-dss", "asset_criticality": "critical" }
+] }
+```
+
+**Roles.** The connector account uses **`web_service_admin`** for Scripted REST
+APIs (plus `cmdb_read` for the underlying tables) — per the CSW User Guide
+([`00-official-references.md`](./00-official-references.md)).
+
+**Point the connector at it.** Set the **table name** field to the resource path
+relative to the instance root — `api/<namespace>/<api_id>/v1/records`
+(e.g. `api/x_cisco_csw/csw_cmdb_ip_export/v1/records`) — then select
+**`ip_address`** as the key and pick the derived fields (`risk_tier`,
+`compliance_scope`, `owner_email`, …) as labels. The script honors
+`sysparm_limit` / `sysparm_offset`, so the connector's normal pagination works.
+
+> Those derived labels are powerful in policy — e.g. *"quarantine any workload
+> where `risk_tier = critical`"* or *"apply the PCI rule set where
+> `compliance_scope contains pci-dss`"* — none of which a plain CMDB column gives you.
+
+**A complete, copy-paste working example** — full GlideRecord script (pagination,
+the four calculated fields above, the owner-email reference walk), endpoint test,
+role grants, scope notes, and connector config — is in
 [`09-scripted-rest-api-example.md`](./09-scripted-rest-api-example.md).
+
+> **Which path should you choose?** Use a **Database View** (§4) when everything
+> you need is a stored column reachable by a one- or two-table join — no code,
+> easiest to maintain. Use a **Scripted REST API** the moment you need a
+> calculated field, a multi-hop reference, or a derived label.
 
 ---
 
