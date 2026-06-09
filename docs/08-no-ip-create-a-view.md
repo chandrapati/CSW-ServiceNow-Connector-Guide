@@ -235,7 +235,8 @@ sysparm_exclude_reference_link=true&sysparm_display_value=true
 
 ---
 
-**Related pages:** [03 — Configuration](./03-configuration.md) ·
+**Related pages:** [10 — Customer Brief (No-IP-Key View & Export)](./10-no-ip-customer-brief-view-and-export.md) ·
+[03 — Configuration](./03-configuration.md) ·
 [06 — Limitations & FAQ](./06-limitations-and-faq.md) ·
 [02 — Prerequisites](./02-prerequisites.md) ·
 [05 — Operations & Troubleshooting](./05-operations-and-troubleshooting.md) ·

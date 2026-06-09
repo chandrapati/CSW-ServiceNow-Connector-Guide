@@ -31,6 +31,8 @@ Read in order, or jump straight to what you need. Each link opens the full page.
 | 06 | **[Limitations & FAQ](./docs/06-limitations-and-faq.md)** | Documented limits and Cisco's FAQ (verbatim, validated). |
 | 07 | **[Validation Notes](./docs/07-validation-notes.md)** | Documented-fact audit + the two flagged Cisco doc inconsistencies. |
 | 08 | **[No IP? Build a ServiceNow View](./docs/08-no-ip-create-a-view.md)** | Step-by-step Database View (JOIN to an IP-bearing table) for when a CMDB table has no IP field — the FAQ workaround, in full. |
+| 09 | **[Scripted REST API Example](./docs/09-scripted-rest-api-example.md)** | Working Scripted REST API (pagination + calculated fields) for when a Database View can't express the data — the server-side-logic path. |
+| 10 | **[Customer Brief: No-IP-Key View & Export](./docs/10-no-ip-customer-brief-view-and-export.md)** | Self-contained hand-to-the-customer brief: why the integration fails without an IP key, the List-view-vs-Database-view clarification, and a concrete IP + hostname + appid + owner + tags → label → policy mapping. |
 
 > **Official Cisco source pages (open directly):** [Connectors — On-Premises 4.0](https://www.cisco.com/c/en/us/td/docs/security/workload_security/secure_workload/user-guide/4_0/cisco-secure-workload-user-guide-on-prem-v40/configure-and-manage-connectors-for-secure-workload.html) · [Connectors — SaaS 4.0](https://www.cisco.com/c/en/us/td/docs/security/workload_security/secure_workload/user-guide/4_0/cisco-secure-workload-user-guide-saas-v40/m-connectors.html) · [Connectors — On-Premises 3.9](https://www.cisco.com/c/en/us/td/docs/security/workload_security/secure_workload/user-guide/3_9/cisco-secure-workload-user-guide-on-prem-v39/configure-and-manage-connectors-for-secure-workload.html)
 
@@ -110,6 +112,9 @@ All guide pages live in [`docs/`](./docs) — direct links below (same as the **
 - 📄 [`docs/05-operations-and-troubleshooting.md`](./docs/05-operations-and-troubleshooting.md) — sync, deletion, Explore cleanup, alerts, common issues
 - 📄 [`docs/06-limitations-and-faq.md`](./docs/06-limitations-and-faq.md) — published limits + Cisco FAQ (verbatim, validated)
 - 📄 [`docs/07-validation-notes.md`](./docs/07-validation-notes.md) — documented-fact audit + flagged Cisco doc inconsistencies
+- 📄 [`docs/08-no-ip-create-a-view.md`](./docs/08-no-ip-create-a-view.md) — full step-by-step Database View (JOIN) for tables with no IP field
+- 📄 [`docs/09-scripted-rest-api-example.md`](./docs/09-scripted-rest-api-example.md) — Scripted REST API example (pagination + calculated fields)
+- 📄 [`docs/10-no-ip-customer-brief-view-and-export.md`](./docs/10-no-ip-customer-brief-view-and-export.md) — customer brief: why no-IP-key fails, List-vs-Database-view, IP + hostname + appid + owner + tags → label → policy
 
 ---
 
