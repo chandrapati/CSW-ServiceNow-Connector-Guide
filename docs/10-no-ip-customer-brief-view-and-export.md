@@ -170,7 +170,7 @@ Table API — **one object per IP**, each containing the IP-key field:
 
 ```json
 { "result": [
-  { "ip_address": "10.10.1.25", "name": "payments-api-01",
+  { "ip_address": "10.10.1.25", "name": "payments-api-01", "app_id": "APP0001234",
     "environment": "production", "owned_by": "Jane Smith",
     "owner_email": "jane.smith@example.com", "risk_tier": "high",
     "compliance_scope": "pci-dss", "asset_criticality": "critical" }

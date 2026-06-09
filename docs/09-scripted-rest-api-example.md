@@ -58,7 +58,7 @@ One row per IP. Each row must contain a field the connector will use as the **IP
 
 ## Step 2 — The Script
 
-The script below queries `cmdb_ci_appl` (application CIs) joined to `cmdb_ci_network_adapter` for IPs. It demonstrates four **calculated / derived fields** that a Database View cannot expose. Adapt the CI table, field names, and business logic to match your CMDB schema.
+The script below queries `cmdb_ci_appl` (application CIs) joined to `cmdb_ci_network_adapter` for IPs. It exports the IP key plus standard CMDB attributes — including an **`app_id`** application business key (hostname is `name`, owner is `owned_by`) — and four **calculated / derived fields** that a Database View cannot expose. Adapt the CI table, field names, and business logic to match your CMDB schema.
 
 ```javascript
 (function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
@@ -97,6 +97,12 @@ The script below queries `cmdb_ci_appl` (application CIs) joined to `cmdb_ci_net
                 // ── Standard CMDB fields ───────────────────────────────────
                 sys_id:           ciSysId,
                 name:             ciGr.getValue('name'),
+
+                // Application identifier (business key) — adjust to your schema.
+                // Many CMDBs use the record 'number' (e.g. APP0001234) or a
+                // custom field such as 'u_app_id' / 'u_application_id'.
+                app_id:           ciGr.getValue('u_app_id') || ciGr.getValue('number') || '',
+
                 mac_address:      naGr.getValue('mac_address')      || '',
                 operational_status: naGr.getDisplayValue('operational_status'),
 
@@ -234,6 +240,7 @@ Expected response shape:
       "ip_address": "10.10.1.25",
       "sys_id": "abc123...",
       "name": "payments-api-01",
+      "app_id": "APP0001234",
       "mac_address": "00:50:56:ab:12:34",
       "operational_status": "Operational",
       "environment": "production",
@@ -252,6 +259,7 @@ Expected response shape:
 
 Verify:
 - `ip_address` is a valid IPv4 or IPv6 string on every row.
+- `app_id` is populated — if it comes back empty, your CMDB stores the application key in a different field; update the `app_id` line (see *Adapting this script*).
 - Reference fields (`support_group`, `business_service`, etc.) return display names, not `sys_id`s.
 - Calculated fields (`risk_tier`, `owner_email`, `compliance_scope`, `asset_criticality`) appear and contain non-empty values for at least one known CI.
 
@@ -281,7 +289,7 @@ The CSW connector's "table" configuration points to a Table API path by default.
    - For the **table name** field, enter the Scripted REST API resource path relative to the instance root:  
      `api/x_cisco_csw/csw_cmdb_ip_export/v1/records`
 2. On the attribute-selection step, select **`ip_address`** as the IP key.
-3. Select the additional attribute fields you want as CSW labels (`risk_tier`, `compliance_scope`, `asset_criticality`, `owner_email`, `environment`, etc.).
+3. Select the additional attribute fields you want as CSW labels (`app_id`, `risk_tier`, `compliance_scope`, `asset_criticality`, `owner_email`, `environment`, etc.).
 4. Set **Additional REST API url params** to:
    ```
    sysparm_limit=500
@@ -309,6 +317,7 @@ For large CMDB estates, set `sysparm_limit` to a value your ServiceNow instance 
 | What to change | Where in the script |
 |---|---|
 | Source CI table | `new GlideRecord('cmdb_ci_appl')` → replace with your table |
+| Application ID field | `app_id:` line → point to your `number` / `u_app_id` / `u_application_id` field |
 | Attribute field names | The `ciGr.getValue(...)` / `ciGr.getDisplayValue(...)` calls |
 | Risk tier logic | `_riskTier()` — adjust thresholds and field names |
 | Owner email walk | `_ownerEmail()` — change if ownership is stored differently |
