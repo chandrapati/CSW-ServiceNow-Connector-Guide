@@ -4,7 +4,7 @@
 
 **A practitioner- and customer-facing guide to the Cisco Secure Workload (CSW) ServiceNow connector — the *Inventory Enrichment* integration that annotates CSW inventory with attributes from your ServiceNow CMDB.**
 
-This repo explains what the connector does (and does not) do, the prerequisites, a step-by-step configuration walkthrough, how the imported labels are used in scopes and segmentation policy, day-2 operations and troubleshooting, and the documented limits — so an SE or customer team can stand it up in a POV or production tenant with no surprises.
+This repo explains what the connector does (and does not) do, the prerequisites, a step-by-step configuration walkthrough, how the imported labels are used in scopes and segmentation policy, day-2 operations and troubleshooting, and the documented limits — so an SE or customer team can stand it up in a POV or production tenant with no surprises. A shorter illustrated setup, in the same shape as the other integration guides, is in [csw-servicenow-integration](https://github.com/chandrapati/csw-servicenow-integration). When a number on that page needs a source, this repo is the one that cites the 4.0 user guide and flags the two places Cisco's own docs disagree.
 
 > **Disclaimer.** This repository is **not** official Cisco product documentation. It is companion enablement material maintained for customer and partner education. Always validate design, scope, supported features, and exact values against your tenant's in-product documentation and the *Cisco Secure Workload User Guide* for **your release** before making production decisions.
 
